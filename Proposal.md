@@ -56,4 +56,14 @@ Project Plan:
 
 **Major tasks and their components**:
 
+- Pick interface to implement (SPI or I2C).
+
+- Write all the software needed for the Raspberry Pi to talk to an SPI/I2C
+device through its GPIO pins.
+
+- Write the hardware needed for the iCEstick to send/receive messages via
+  SPI/I2C.
+
+- Debug any issue and perfect the interface.
+
 **Division of work**: I am the sole author of this work, so it's all me!

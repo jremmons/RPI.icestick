@@ -1,5 +1,3 @@
-`define N 8
-
 module main (
              input clk,
              input SCLK,
@@ -10,13 +8,25 @@ module main (
              output D5
              );
 
-   reg buffer;
-   reg count;
+   wire w;
+   SPI spi (
+            .sclk(SCLK),
+            .mosi(MOSI),
+            .ce0(CE0),
+            .miso(MISO),
+            .ssig(w)
+            );
 
-   always @(posedge SCLK) begin
-      buffer = MOSI;
-      D5 = buffer;
-   end 
+   assign D5 = w;
+
+   // reg buffer;
+   // reg count;
+
+   // always @(posedge SCLK) begin
+   //    buffer = MOSI;
+   //    D5 = buffer;
+   // end 
+
 endmodule
 
 // wire ucSEL_;

@@ -1,43 +1,50 @@
-// adapted from example spi slave at http://www.fpga4fun.com/SPI2.html
+// module FIFO (
+//              input  data_in[7:0],
+//              input  insert,
+//              input  next,
+//              output data_out[7:0],
+//              output qfull
+//              );
 
-module SPISlave (
-    input clk,
-    // act as slave for microcontroller
-    input ucSCLK,
-    input ucMOSI,
-    output ucMISO,
-    input ucSEL_,
-    // the data bits to be read and written
-    input [WIDTH-1:0] data_in,
-    output reg [WIDTH-1:0] data_out
-);
+//    parameter QSIZE_BYTES = 32;
 
-parameter WIDTH = 32;
+//    reg queue[8*QSIZE_BYTES-1:0];
+   
+// endmodule
+   
+module SPI (
+                 input  sclk,  // slave clock
+                 input  mosi,  // master out, slave in
+                 input  ce0,   // clock enable
+                 output miso,  // master in, slave out
+                 output ssig   // slave signal 
+                 );
 
-// sync ucSCLK to the FPGA clock using a 3-bits shift register
-reg [2:0] SCLKr; always @(posedge clk) SCLKr <= {SCLKr[1:0],ucSCLK&~ucSEL_};
-wire SCLK_rising = SCLKr[2:1] == 2'b01;     // detect ucSCLK rising edges
+   reg [1:0] count = 2'b00;
 
-// same thing for ucSEL_
-reg [2:0] SSELr; always @(posedge clk) SSELr <= {SSELr[1:0],ucSEL_};
-wire SSEL_start = SSELr[2:1] == 2'b10;      // start on falling edge
-wire SSEL_end = SSELr[2:1] == 2'b01;        // stop on rising edge
+   reg [7:0] send = 8'b00001111;
+   reg send_out;
+   reg [7:0] receive;
 
-// and for ucMOSI, but no need to detect edges
-reg [1:0] MOSIr; always @(posedge clk) MOSIr <= {MOSIr[0],ucMOSI};
-wire MOSI_data = MOSIr[1];
+   // receive and transmit data
+   reg [2:0] index = 3'b111;
+   always @(posedge sclk) 
+   begin
+      receive <= {receive[6:0], mosi};
+      index = index - 1;
+   end
 
-reg [WIDTH-1:0] shifter;
-always @(posedge clk) begin
-    if (SSEL_start)
-        shifter <= data_in;
-    if (SCLK_rising) // rotate left, i.e. MSB out and LSB in
-        shifter <= {shifter[WIDTH-2:0],MOSI_data};
-    if (SSEL_end)
-        data_out <= shifter;
-end
-
-// we'll need to tri-state ucMISO if there's more than one slave on the SPI bus
-assign ucMISO = shifter[WIDTH-1]; // send MSB first
+   always @(negedge ce0) begin      
+      case(count)
+        2'b00: send <= 8'b00000001;
+        2'b01: send <= 8'b00000010;
+        2'b10: send <= 8'b00000100;
+        2'b11: send <= 8'b0001000;
+      endcase
+      count <= count + 1;
+   end
+   
+   assign ssig = receive[7];
+   assign miso = send[index];
 
 endmodule

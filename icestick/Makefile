@@ -1,7 +1,7 @@
 DEVICE = 1k
 PACKAGE = tq144
 
-VERILOGS = top.v spi.v pll.v 
+VERILOGS = top.v spi.v #pll.v 
 PCF = icestick.pcf
 
 QUIET = -q

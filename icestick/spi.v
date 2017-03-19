@@ -1,3 +1,7 @@
+// TODO implement hardqare queue
+// TODO write demo app on FPGA (set LEDs)
+// TODO write basic c library
+// TODO write python bindings
 
 // module FIFO (
 //              input  data_in[7:0],

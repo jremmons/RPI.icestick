@@ -1,3 +1,4 @@
+
 // module FIFO (
 //              input  data_in[7:0],
 //              input  insert,
@@ -21,29 +22,45 @@ module SPI (
                  );
 
    reg [1:0] count = 2'b00;
-
-   reg [7:0] send = 8'b00001111;
-   reg send_out;
+   reg [7:0] send = 8'b00000000;
    reg [7:0] receive;
+
+   reg latch_data = 0;   
+   wire clock = sclk | latch_data;
+
+   // prepare for transmission
+   always @(negedge ce0) begin      
+      latch_data <= 0;
+   end
+   
+   // end transmission
+   always @(posedge ce0) begin
+      latch_data <= 1;
+
+      // TODO grab data and put data into registers/FIFO
+      
+      // case(count)
+      //   2'b00: send <= 8'b00000001;
+      //   2'b01: send <= 8'b00000010;
+      //   2'b10: send <= 8'b00000100;
+      //   2'b11: send <= 8'b00001000;
+      // endcase
+      // count <= count + 1;
+      send <= receive;
+   end
 
    // receive and transmit data
    reg [2:0] index = 3'b111;
-   always @(posedge sclk) 
-   begin
-      receive <= {receive[6:0], mosi};
-      index = index - 1;
+   always @(posedge clock) begin
+      if(latch_data == 0) begin
+         receive <= {receive[6:0], mosi};
+         index <= index - 1;
+      end
+      else begin
+        index <= 3'b111;
+      end
    end
 
-   always @(negedge ce0) begin      
-      case(count)
-        2'b00: send <= 8'b00000001;
-        2'b01: send <= 8'b00000010;
-        2'b10: send <= 8'b00000100;
-        2'b11: send <= 8'b0001000;
-      endcase
-      count <= count + 1;
-   end
-   
    assign ssig = receive[7];
    assign miso = send[index];
 

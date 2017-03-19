@@ -24,24 +24,26 @@ int main (void)
   printf("about to send the buffer: %s\n", (char*) data);
 
   int i;
-  for( i = 0; i < 1000000; i++ ){
+  for( i = 0; i < 100000; i++ ){
 
-    system("gpio edge 0 falling"
-    data[0] = 0xff;
+    //system("gpio edge 0 falling"
+    data[0] = 0x80;
+    //fprintf(stderr, "sending %u\n", data[0]);
     if( wiringPiSPIDataRW(0, data, 1) == -1 ){
       fprintf(stderr, "ERROR: data transfer error\n");
       return -1;    
     }
-    fprintf(stderr, "sending 1\n");
-    delay(1000);
+    //printf("received %u\n", data[0]);
+    //delay(1000);
       
-    data[0] = 0x0;
+    data[0] = 1;
+    //fprintf(stderr, "sending %u\n", data[0]);
     if( wiringPiSPIDataRW(0, data, 1) == -1 ){
       fprintf(stderr, "ERROR: data transfer error\n");
       return -1;    
     }
-    fprintf(stderr, "sending 0\n");
-    delay(1000);
+    //printf("received %u\n", data[0]);
+    //delay(1000);
     
   }
   

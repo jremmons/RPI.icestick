@@ -12,19 +12,22 @@ module main (
              );
 
    wire ssig;
-   wire [7:0] data;
+   wire [7:0] data_incoming;
+   wire [7:0] data_outgoing = 8'b10101010;
    SPI spi (
+            .clk(clk),
             .sclk(SCLK),
             .mosi(MOSI),
             .ce0(CE0),
             .miso(MISO),
             .ssig(ssig),
-            .data(data)
+            .data_incoming(data_incoming),
+            .data_outgoing(data_outgoing)
             );
 
-   assign D1 = data[0];
-   assign D2 = data[1];
-   assign D3 = data[2];
-   assign D4 = data[3];
+   assign D1 = data_incoming[0];
+   assign D2 = data_incoming[1];
+   assign D3 = data_incoming[2];
+   assign D4 = data_incoming[3];
 
 endmodule

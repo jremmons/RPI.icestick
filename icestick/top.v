@@ -15,7 +15,6 @@ module main (
    wire [7:0] data_incoming;
    wire [7:0] data_outgoing = 8'b10101010;
    SPI spi (
-            .clk(clk),
             .sclk(SCLK),
             .mosi(MOSI),
             .ce0(CE0),

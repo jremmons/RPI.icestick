@@ -1,10 +1,10 @@
 // [X] write demo app on FPGA (set LEDs)
 // [] write basic c library
 // [] write python bindings
-// [] implement hardqare queue
+// [] implement hardware queue
 
 module SPI (
-            input        clk, // fpga clock       
+            //input        clk, // fpga clock       
             input        sclk, // slave clock
             input        mosi, // master out, slave in
             input        ce0, // clock enable

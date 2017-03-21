@@ -9,7 +9,8 @@ setup(
     author = "John Emmons",
     author_email = "emmons.john@gmail.com",
     packages = ['RPI_icestick'],
-    ext_modules = [Extension('RPI_ice40',
-                             sources = glob.glob('RPI_icestick/module/*.c'),
+    package_dir = {'RPI_icestick' : 'python'},
+    ext_modules = [Extension('RPI_icestick_spi',
+                             sources = glob.glob('python/ext_module/*.c'),
                              libraries = ['wiringPi'])]
 )

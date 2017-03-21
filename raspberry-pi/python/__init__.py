@@ -1,1 +1,1 @@
-from RPI_icestick_spi import *
+from SPI_interface import SPI_interface

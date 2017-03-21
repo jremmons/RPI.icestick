@@ -13,7 +13,7 @@ module main (
 
    wire ssig;
    wire [7:0] data_incoming;
-   wire [7:0] data_outgoing = 8'b0001111;
+   reg [7:0] data_outgoing = 8'b0001111;
    SPI spi (
             .sclk(SCLK),
             .mosi(MOSI),
@@ -29,4 +29,8 @@ module main (
    assign D3 = data_incoming[2];
    assign D4 = data_incoming[3];
 
+   always @(posedge clk) begin
+      data_outgoing <= data_incoming + 3;
+   end
+   
 endmodule

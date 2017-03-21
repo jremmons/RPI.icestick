@@ -13,7 +13,7 @@ module main (
 
    wire ssig;
    wire [7:0] data_incoming;
-   wire [7:0] data_outgoing = 8'b10101010;
+   wire [7:0] data_outgoing = 8'b0001111;
    SPI spi (
             .sclk(SCLK),
             .mosi(MOSI),

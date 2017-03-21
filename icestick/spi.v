@@ -49,6 +49,8 @@ module SPI (
       end
    end
 
+endmodule
+   
 module FIFO (
              input        reset,
              input [7:0]  wdata,
@@ -121,6 +123,5 @@ module RAM256x8 (
                           .RCLKE(rclke),
                           .RE(re),
                           );
-endmodule
 
 endmodule
